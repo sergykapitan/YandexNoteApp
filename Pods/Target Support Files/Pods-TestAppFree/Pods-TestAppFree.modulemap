@@ -1,0 +1,6 @@
+module Pods_TestAppFree {
+  umbrella header "Pods-TestAppFree-umbrella.h"
+
+  export *
+  module * { export * }
+}
