@@ -20,8 +20,10 @@ class SaveNoteDBOperation: BaseDBOperation {
     }
     
     override func main() {
-        notebook.add(note: note)
-        notebook.saveToFile()
+        notebook.add(noteToAdd: note)
+       // notebook.add(note: note)
+       // notebook.saveToFile()
+        notebook.saveNotebookToFile()
         
         DDLogDebug("Save notes to db completed")
         

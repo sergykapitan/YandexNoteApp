@@ -7,3 +7,23 @@
 //
 
 import Foundation
+import CocoaLumberjack
+
+class LoadNotesDBOperation: BaseDBOperation {
+    
+    var result: [Note]?
+    
+    override init(notebook: FileNotebook) {
+        super.init(notebook: notebook)
+    }
+    
+    override func main() {
+        notebook.loadNotebookFromFile()
+       // notebook.loadFromFile()
+        result = notebook.notes
+        
+        DDLogDebug("Load notes from db completed")
+        
+        finish()
+    }
+}
