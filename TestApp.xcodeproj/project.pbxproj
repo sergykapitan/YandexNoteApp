@@ -36,6 +36,7 @@
 		885BFCC022C815D500405815 /* NoteExtentionTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 885BFCBF22C815D500405815 /* NoteExtentionTest.swift */; };
 		886A6BBF22CF89CF009B9F70 /* ColorPaletteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 886A6BBE22CF89CF009B9F70 /* ColorPaletteView.swift */; };
 		887A7B2422E11189005C2641 /* UIViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 887A7B2322E11189005C2641 /* UIViewExtensions.swift */; };
+		889C450922F4CAFA0080EDC0 /* AsyncOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 889C450822F4CAFA0080EDC0 /* AsyncOperation.swift */; };
 		889CBDB322E84AEC009B1B7D /* DisignableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 889CBDB222E84AEC009B1B7D /* DisignableView.swift */; };
 		889CBDB522E8A185009B1B7D /* JBTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 889CBDB422E8A185009B1B7D /* JBTabBarController.swift */; };
 		889CBDB822E8A22B009B1B7D /* JBTabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 889CBDB722E8A22B009B1B7D /* JBTabBar.swift */; };
@@ -93,6 +94,7 @@
 		886A6BBE22CF89CF009B9F70 /* ColorPaletteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPaletteView.swift; sourceTree = "<group>"; };
 		887A7B2322E11189005C2641 /* UIViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtensions.swift; sourceTree = "<group>"; };
 		8887C52C22C8F8FB009DB682 /* libCocoaLumberjack.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libCocoaLumberjack.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		889C450822F4CAFA0080EDC0 /* AsyncOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncOperation.swift; sourceTree = "<group>"; };
 		889CBDB222E84AEC009B1B7D /* DisignableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisignableView.swift; sourceTree = "<group>"; };
 		889CBDB422E8A185009B1B7D /* JBTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = JBTabBarController.swift; path = ../JBTabBarController.swift; sourceTree = "<group>"; };
 		889CBDB722E8A22B009B1B7D /* JBTabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JBTabBar.swift; sourceTree = "<group>"; };
@@ -178,6 +180,7 @@
 		882333E822C0DD6500EF8B82 /* TestApp */ = {
 			isa = PBXGroup;
 			children = (
+				889C450722F4CACF0080EDC0 /* Operation */,
 				8823341022C0E0CA00EF8B82 /* App */,
 				8823340922C0E09800EF8B82 /* Model */,
 				885BFCBB22C7FB2100405815 /* View Controller */,
@@ -268,6 +271,14 @@
 				885BFC7522C7B1F900405815 /* Debug.xcconfig */,
 			);
 			path = Configuration;
+			sourceTree = "<group>";
+		};
+		889C450722F4CACF0080EDC0 /* Operation */ = {
+			isa = PBXGroup;
+			children = (
+				889C450822F4CAFA0080EDC0 /* AsyncOperation.swift */,
+			);
+			path = Operation;
 			sourceTree = "<group>";
 		};
 		889CBDB622E8A1AE009B1B7D /* JBTabBar */ = {
@@ -574,6 +585,7 @@
 				8823340E22C0E0BD00EF8B82 /* Note.swift in Sources */,
 				8825CFEF22E34FBB00581F0A /* imageCell.swift in Sources */,
 				889CBDB522E8A185009B1B7D /* JBTabBarController.swift in Sources */,
+				889C450922F4CAFA0080EDC0 /* AsyncOperation.swift in Sources */,
 				8825CFED22E33FF800581F0A /* GallaryCollectionViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
