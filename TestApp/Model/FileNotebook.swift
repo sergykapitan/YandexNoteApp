@@ -28,6 +28,9 @@ class FileNotebook{
         }
         
     }
+    public func replaceAll(notes: [Note]) {
+        self.notes = notes
+    }
     
     public func remove(with uid: String) {
         if let index: Int = notes.firstIndex(where: {$0.uid == uid}) {
