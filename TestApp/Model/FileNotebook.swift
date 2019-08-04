@@ -14,7 +14,7 @@ class FileNotebook{
      public private(set) var notes: [Note] = []
      static var shared = FileNotebook()
     
-    var readNotes: [Note] { return self.notes }
+     var readNotes: [Note] { return self.notes }
     
     
     public func add(noteToAdd note:Note) {
