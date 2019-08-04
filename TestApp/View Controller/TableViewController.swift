@@ -7,12 +7,23 @@
 //
 
 import UIKit
+import CocoaLumberjack
 
 class TableViewController: UIViewController {
     
    //MARK: Property
-    var notebook = FileNotebook.shared
+  //  var notebook = FileNotebook.shared
+    
+    private let notebook = AppDelegate.noteBook
     var note: Note?
+    
+    private var notes: [Note] = [] {
+        didSet {
+            notes.sort(by: { $0.title < $1.title })
+            
+            DDLogDebug("The list of notes is sorted")
+        }
+    }
   
     //MARK: Outlets
     @IBOutlet var noteTableView: UITableView!
@@ -29,10 +40,26 @@ class TableViewController: UIViewController {
         self.tabBarController?.tabBar.isHidden = false
     }
     override func viewWillAppear(_ animated: Bool) {
-        guard note != nil else { return }
-        notebook.add(noteToAdd: note!)
+        let loadNotes = LoadNotesOperation(notebook: AppDelegate.noteBook,
+                                           backendQueue: OperationQueue(),
+                                           dbQueue: OperationQueue())
+        loadNotes.completionBlock = {
+            let loadedNotes = loadNotes.result ?? []
+             DDLogDebug("Downloading notes completed. Uploaded \(loadedNotes.count) notes")
+            self.notes = loadedNotes
+            
+            OperationQueue.main.addOperation {
+                DDLogDebug("Updating the table after loading data")
+                self.noteTableView.reloadData()
+                super.viewWillAppear(animated)
+            }
+        }
         
-    }
+       OperationQueue().addOperation(loadNotes)
+      //  guard note != nil else { return }
+      //  notebook.add(noteToAdd: note!)
+        
+}
     //MARK: Navigation
     func navigationItem() {
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Edit", style: .plain, target: self, action: #selector(tableViewEditing(_:)))
@@ -87,7 +114,8 @@ extension TableViewController: UITableViewDelegate, UITableViewDataSource {
     
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return notebook.notes.count
+        return notes.count
+        //notebook.notes.count
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -97,27 +125,14 @@ extension TableViewController: UITableViewDelegate, UITableViewDataSource {
    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell(style: .subtitle, reuseIdentifier: nil)
-//        let maskPathTop = UIBezierPath(roundedRect: cell.bounds, byRoundingCorners: [.topLeft, .topRight], cornerRadii: CGSize(width: 5.0, height: 5.0))
-//        let shapeLayerTop = CAShapeLayer()
-//        shapeLayerTop.frame = cell.bounds
-//        shapeLayerTop.path = maskPathTop.cgPath
-//        cell.layer.cornerRadius = 10
-//        cell.layer.borderColor = UIColor.black.cgColor
-//        cell.layer.borderWidth = 2
- //       cell.layer.mask = shapeLayerTop
-  //      cell.layer.cornerRadius = 10
-  //      let shadowPath2 = UIBezierPath(rect: cell.bounds)
-  //      cell.layer.masksToBounds = false
-  //      cell.layer.shadowColor = UIColor.black.cgColor
-     //   cell.layer.shadowOffset = CGSize(width: CGFloat(1.0), height: CGFloat(3.0))
-//        cell.layer.shadowOpacity = 0.5
-//        cell.layer.shadowPath = shadowPath2.cgPath
-        cell.textLabel?.text = notebook.notes[indexPath.section].title
+        let noteRes = notes[indexPath.section]
+        
+        cell.textLabel?.text = noteRes.title //notebook.notes[indexPath.section].title
         cell.textLabel?.numberOfLines = 0
-        cell.detailTextLabel?.text = notebook.notes[indexPath.section].content
+        cell.detailTextLabel?.text = noteRes.content //notebook.notes[indexPath.section].content
         cell.detailTextLabel?.numberOfLines = 5
         cell.imageView?.image = UIImage(named: "fon")
-        cell.imageView?.backgroundColor = notebook.notes[indexPath.section].color
+        cell.imageView?.backgroundColor = noteRes.color //notebook.notes[indexPath.section].color
         return cell
     }
 
@@ -141,12 +156,31 @@ extension TableViewController: UITableViewDelegate, UITableViewDataSource {
         return todaysDate
     }
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        
         let editButton = UITableViewRowAction(style: .normal, title: "Delete") { (rowAction, indexpath) in
-            let uid = self.notebook.notes[indexpath.section].uid
-            self.notebook.remove(with: uid)
-            self.noteTableView.reloadData()
+           // let uid = self.notebook.notes[indexpath.section].uid
+            let uid = self.notes[indexPath.section].uid
+            
+            let removeNote = RemoveNoteOperation(noteId: uid,
+                                                 notebook: self.notebook,
+                                                 backendQueue: OperationQueue(),
+                                                 dbQueue: OperationQueue())
+            
+            removeNote.completionBlock = {
+                OperationQueue.main.addOperation {
+                    self.notes.remove(at: indexPath.row)
+                    
+                    tableView.deleteRows(at: [indexPath], with: .automatic)
+                    
+                    DDLogDebug("Removed table row with index \(indexPath.section)")
+                }
+            }
+            OperationQueue().addOperation(removeNote)
+           // self.notebook.remove(with: uid)
+           // self.noteTableView.reloadData()
         }
         editButton.backgroundColor = .red
+        
         let cancelButton = UITableViewRowAction(style: .normal, title: "Cancel") { (rowAction, indexpath) in
             self.noteTableView.reloadData()
         }
