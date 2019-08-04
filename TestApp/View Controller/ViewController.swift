@@ -122,8 +122,25 @@ class ViewController: UIViewController, UITextViewDelegate {
         
     }
     
-    
-    
+//    private func saveNote() {
+//
+//        guard let editedNote = Note(uid: note.uid, title: titleTextField.text ?? "", content: textView.text ?? "", color: color ?? UIColor.white, importance: .normal, destroyDate: switchDatePicker.isOn ? datePicker.date : nil) else {
+//            return
+//        }
+//
+//        let saveNoteOperation = SaveNoteOperation(note: editedNote, notebook: AppDelegate.noteBook, backendQueue: OperationQueue(), dbQueue: OperationQueue())
+//
+//        saveNoteOperation.completionBlock = {
+//            OperationQueue.main.addOperation {
+//                DDLogDebug("Return to the list of notes")
+//
+//                self.navigationController?.popViewController(animated: true)
+//            }
+//        }
+//
+//        OperationQueue().addOperation(saveNoteOperation)
+//    }
+//
     //MARK: - Navigation
     
     func navigationItem() {
@@ -142,10 +159,27 @@ class ViewController: UIViewController, UITextViewDelegate {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "SegueTableView" {
              if let tableViewController = segue.destination as? TableViewController {
-                note = Note(uid: note.uid, title: titleTextField.text ?? "", content: textView.text ?? "", color: color ?? UIColor.white, importance: .normal, destroyDate: switchDatePicker.isOn ? datePicker.date : nil)
                 
-                    onDone?(note)
-                    tableViewController.note = note
+                 let editedNote = Note(uid: note.uid, title: titleTextField.text ?? "", content: textView.text ?? "", color: color ?? UIColor.white, importance: .normal, destroyDate: switchDatePicker.isOn ? datePicker.date : nil)
+                 let saveNoteOperation = SaveNoteOperation(note: editedNote, notebook: AppDelegate.noteBook, backendQueue: OperationQueue(), dbQueue: OperationQueue())
+                saveNoteOperation.completionBlock = {
+                    OperationQueue.main.addOperation {
+                        DDLogDebug("Return to the list of notes")
+                        
+                        //self.navigationController?.popViewController(animated: true)
+                    }
+                }
+                
+                OperationQueue().addOperation(saveNoteOperation)
+                
+                
+                
+                
+                
+//                note = Note(uid: note.uid, title: titleTextField.text ?? "", content: textView.text ?? "", color: color ?? UIColor.white, importance: .normal, destroyDate: switchDatePicker.isOn ? datePicker.date : nil)
+//
+//                    onDone?(note)
+//                    tableViewController.note = note
             }
         }
         if segue.identifier == "SeguePikerColor"{

@@ -140,16 +140,20 @@ extension TableViewController: UITableViewDelegate, UITableViewDataSource {
         return noteTableView.isEditing
     }
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return notebook.notes[section].importance.rawValue
+     //   notebook.notes[section].importance.rawValue
+        return notes[section].importance.rawValue
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        performSegue(withIdentifier: "SegueEditNote", sender: notebook.notes[indexPath.section])
+        performSegue(withIdentifier: "SegueEditNote", sender: //notebook.notes[indexPath.section]
+            notes[indexPath.section]
+        )
     }
    
    
     func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
         let autoDestroyDate = Date(timeInterval: 60 * 60 * 24 * 10, since: Date())
-        let date = notebook.notes[section].destroyDate
+        //notebook.notes[section].destroyDate
+        let date = notes[section].destroyDate
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MMM dd, yyyy"
         let todaysDate = dateFormatter.string(from: date ?? autoDestroyDate)
@@ -158,7 +162,7 @@ extension TableViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         
         let editButton = UITableViewRowAction(style: .normal, title: "Delete") { (rowAction, indexpath) in
-           // let uid = self.notebook.notes[indexpath.section].uid
+          //  let uid = self.notebook.notes[indexpath.section].uid
             let uid = self.notes[indexPath.section].uid
             
             let removeNote = RemoveNoteOperation(noteId: uid,
@@ -168,16 +172,17 @@ extension TableViewController: UITableViewDelegate, UITableViewDataSource {
             
             removeNote.completionBlock = {
                 OperationQueue.main.addOperation {
-                    self.notes.remove(at: indexPath.row)
+                    self.notes.remove(at: indexPath.section)
                     
-                    tableView.deleteRows(at: [indexPath], with: .automatic)
+                 //   tableView.deleteRows(at: [indexPath], with: .automatic)
+                    tableView.deleteSections([indexPath.section], with: .automatic)
                     
                     DDLogDebug("Removed table row with index \(indexPath.section)")
                 }
             }
             OperationQueue().addOperation(removeNote)
            // self.notebook.remove(with: uid)
-           // self.noteTableView.reloadData()
+            self.noteTableView.reloadData()
         }
         editButton.backgroundColor = .red
         
