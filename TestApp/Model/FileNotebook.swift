@@ -14,7 +14,7 @@ class FileNotebook{
      public private(set) var notes: [Note] = []
      static var shared = FileNotebook()
     
-    var readNotes: [Note] { return self.notes }
+     var readNotes: [Note] { return self.notes }
     
     
     public func add(noteToAdd note:Note) {
@@ -27,6 +27,9 @@ class FileNotebook{
         notes.append(note)
         }
         
+    }
+    public func replaceAll(notes: [Note]) {
+        self.notes = notes
     }
     
     public func remove(with uid: String) {

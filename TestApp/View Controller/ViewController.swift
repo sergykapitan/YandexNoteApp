@@ -143,6 +143,7 @@ class ViewController: UIViewController, UITextViewDelegate {
         if segue.identifier == "SegueTableView" {
              if let tableViewController = segue.destination as? TableViewController {
                 note = Note(uid: note.uid, title: titleTextField.text ?? "", content: textView.text ?? "", color: color ?? UIColor.white, importance: .normal, destroyDate: switchDatePicker.isOn ? datePicker.date : nil)
+                
                     onDone?(note)
                     tableViewController.note = note
             }
